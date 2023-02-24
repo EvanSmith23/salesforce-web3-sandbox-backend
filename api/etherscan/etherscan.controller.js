@@ -45,11 +45,19 @@ module.exports = {
         let walletTokens = [];
         try {
             if (wallet !== undefined && wallet !== 'undefined') {
-                console.log('-- here1 --')
-                console.log("wallet: ", wallet);
+                /**
+                 * 
+                 * TODO: INSERT WALLET INTO WALLET TABLE
+                 * CHECK IF ALREADY EXISTS
+                 * 
+                 * 
+                 */
+                const eth = await alchemy.core.getBalance(wallet);
+
+                console.log("eth: ", parseInt(eth));
 
                 const tokens = await alchemy.core.getTokenBalances(wallet);
-                //console.log(tokens.tokenBalances);
+                
                 for (let i = 0; i < tokens.tokenBalances.length; i++){
                     let data = await alchemy.core.getTokenMetadata(tokens.tokenBalances[i].contractAddress);
                     walletTokens.push({
@@ -59,11 +67,26 @@ module.exports = {
                     })
                     
                 }
-                console.log(walletTokens);
+                //console.log(walletTokens);
                 return res.json(walletTokens);
             } else {
                 console.log('-- here2 --')
             }
+        } catch (err) {
+            console.error(err);
+        }
+    },
+    GET_WALLET_TRANSACTIONS: async (req, res) => {
+        const { wallet } = req.params;
+
+        console.log('GET_WALLET_TRANSACTIONS');
+
+        try {
+            let result = await Axios.get('https://api.etherscan.io/api?module=account&action=tokentx&address=' + wallet + '&sort=desc&apikey=' + process.env.ETHERSCAN_API_KEY)// + process.env.ETHERSCAN_API_KEY)
+        
+            // console.log(result.data);
+
+            return res.json({'transactions':result.data})
         } catch (err) {
             console.error(err);
         }
