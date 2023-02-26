@@ -26,23 +26,37 @@ module.exports = {
                 }
             }
 
+            /**
+             * Description: Add native token
+             */
             let walletTokens = [];
             let nativeToken = await alchemy.core.getBalance(wallet);
-            let otherTokens = await alchemy.core.getTokenBalances(wallet);
+            walletTokens.push({ 
+                key: 'ETH',
+                label: 'ETH', 
+                symbol: 'ETH',
+                name: 'Ether',
+                bottomLeftText: 'native',
+                topRightText: (parseInt(nativeToken) / Math.pow(10, 18)),
+                contractAddress: 'native', 
+                walletBalance: (parseInt(nativeToken) / Math.pow(10, 18)),
+            })
 
             /**
              * Description: Loop through tokens and retrieve token metadata
              **/
+            let otherTokens = await alchemy.core.getTokenBalances(wallet);
+            console.log(otherTokens);
             for (let i = 0; i < otherTokens.tokenBalances.length; i++){
                 let data = await alchemy.core.getTokenMetadata(otherTokens.tokenBalances[i].contractAddress);
 
                 walletTokens.push({
                     key: data.symbol,
                     label: data.symbol,
-                    bottomLeftText: otherTokens.tokenBalances[i].contractAddress.substr(otherTokens.tokenBalances[i].contractAddress.length - 8),
+                    bottomLeftText: otherTokens.tokenBalances[i].contractAddress.substr(otherTokens.tokenBalances[i].contractAddress.length - 6),
                     topRightText: parseInt(otherTokens.tokenBalances[i].tokenBalance) / Math.pow(10, data.decimals),
                     contractAddress: otherTokens.tokenBalances[i].contractAddress,
-                    walletBalance: otherTokens.tokenBalances[i].tokenBalance,
+                    walletBalance: parseInt(otherTokens.tokenBalances[i].tokenBalance) / Math.pow(10, data.decimals),
                     ...data
                 })
             }

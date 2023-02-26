@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "npx functions-framework --target=server --signature-type=http"
+    
   },
   "author": "",
   "license": "ISC",

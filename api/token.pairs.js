@@ -4,15 +4,17 @@ const api = require('etherscan-api').init(process.env.ETHERSCAN_API_KEY, 'arbitr
 
 module.exports = {
     GET_TOKEN_PAIRS: async (req, res) => {
-        const { contract } = req.params;
+        const { symbol } = req.params;
+
+        console.log(symbol);
  
         try {
-            var supply = await api.stats.tokensupply(null, contract);
-            var dexscreener = await Axios.get('https://api.dexscreener.com/latest/dex/tokens/' + contract);
+            //var supply = await api.stats.tokensupply(null, contract);
+            var dexscreener = await Axios.get('https://api.dexscreener.com/latest/dex/search/?q=' + symbol);
+            console.log(dexscreener.data.pairs.length);
             let pairs = dexscreener.data.pairs.filter((pair) => pair.dexId == 'uniswap' || pair.dexId == 'sushiswap')
             pairs = pairs.sort((a,b) => a.volume.h24 > b.volume.h24)
             pairs.forEach((pair) => {
-                console.log(pair);
                 pair.name = pair.baseToken.symbol + 'x' + pair.quoteToken.symbol + '_' + pair.chainId + '_' + pair.dexId;
                 pair.baseTokenName = pair.baseToken.name;
                 pair.baseTokenAddress = pair.baseToken.address;
@@ -24,7 +26,7 @@ module.exports = {
             })
 
             return res.json({
-                etherscanTokenSupply: supply.result,
+                //etherscanTokenSupply: supply.result,
                 pairs: pairs
             });
         } catch (err) {
