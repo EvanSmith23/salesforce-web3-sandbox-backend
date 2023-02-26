@@ -7,6 +7,7 @@ exports.up = function(knex) {
         table.increments('id').primary();
         table.string('address');
         table.string('chain');
+        table.timestamps(true, true);
     });
 };
 
