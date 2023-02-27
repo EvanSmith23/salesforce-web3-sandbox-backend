@@ -1,0 +1,119 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0", 
+      "title": "Web3 Sandbox",
+      "description": "Build to break. Ship utility.",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/wallet/tokens/{wallet}": {
+            "get": {
+                "summary": "Get user wallet",
+                "description": "Returns the user's wallet balance.",
+                "tags": ["Wallet"],
+                "parameters": [
+                    {
+                    "name": "wallet",
+                    "in": "path",
+                    "description": "The wallet address to retrieve the wallet balance for.",
+                    "required": true,
+                    "type": "string",
+                    "example": "0xEBe035dA5DF98E8297D31cFD1c249732a6d6d3bA"
+                    }
+                ],
+                "responses": {
+                "200": {
+                    "description": "Successful response",
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "balance": {
+                        "type": "number",
+                        "description": "The user's wallet balance"
+                        }
+                    }
+                    }
+                }
+                }
+            }
+        },
+        "/api/wallet/transactions/{wallet}": {
+            "get": {
+                "summary": "Get transactions by user wallet",
+                "description": "Returns the user's wallet transactions.",
+                "tags": ["Wallet"],
+                "parameters": [
+                    {
+                        "name": "wallet",
+                        "in": "path",
+                        "description": "The wallet address to retrieve the wallet transactions for.",
+                        "required": true,
+                        "type": "string",
+                        "example": "0xEBe035dA5DF98E8297D31cFD1c249732a6d6d3bA"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                    "description": "Successful response",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                        "balance": {
+                            "type": "number",
+                            "description": "The user's wallet balance"
+                        }
+                        }
+                    }
+                    }
+                }
+            }
+        },
+        "/api/token/pairs/{symbol}": {
+            "get": {
+                "summary": "Get transactions by user wallet",
+                "description": "Returns the user's wallet transactions.",
+                "tags": ["Token"],
+                "parameters": [
+                    {
+                        "name": "symbol",
+                        "in": "path",
+                        "description": "The symbol of the token to be retrieved.",
+                        "required": true,
+                        "type": "string",
+                        "example": "WETH"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "The user's wallet balance"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+      {
+        "name": "Wallet"
+      },{
+        "name": "Token"
+      }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"]
+}

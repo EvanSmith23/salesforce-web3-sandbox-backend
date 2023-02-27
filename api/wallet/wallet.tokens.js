@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Network, Alchemy } = require('alchemy-sdk');
-const Wallets = require('../database/models/wallets');
+const Wallets = require('../../database/models/wallets');
 
 const settings = {
     apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
@@ -27,34 +27,46 @@ module.exports = {
             }
 
             /**
+             * 
+             * Step 2
              * Description: Add native token
+             * 
              */
-            let walletTokens = [];
+            // Returns: balance of native token
             let nativeToken = await alchemy.core.getBalance(wallet);
+
+            let walletTokens = [];
             walletTokens.push({ 
                 key: 'ETH',
                 label: 'ETH', 
                 symbol: 'ETH',
                 name: 'Ether',
                 bottomLeftText: 'native',
-                topRightText: (parseInt(nativeToken) / Math.pow(10, 18)),
+                topRightText: ((parseInt(nativeToken) / Math.pow(10, 18))).toString(),
                 contractAddress: 'native', 
                 walletBalance: (parseInt(nativeToken) / Math.pow(10, 18)),
+                decimals: 18
             })
 
             /**
+             * 
+             * Step 3
              * Description: Loop through tokens and retrieve token metadata
+             * 
              **/
-            let otherTokens = await alchemy.core.getTokenBalances(wallet);
-            console.log(otherTokens);
-            for (let i = 0; i < otherTokens.tokenBalances.length; i++){
-                let data = await alchemy.core.getTokenMetadata(otherTokens.tokenBalances[i].contractAddress);
 
+            // Returns: address (wallet address), tokenBalances
+            let otherTokens = await alchemy.core.getTokenBalances(wallet);
+
+            for (let i = 0; i < otherTokens.tokenBalances.length; i++){
+                // Returns: symbol, name, logo, decimals
+                let data = await alchemy.core.getTokenMetadata(otherTokens.tokenBalances[i].contractAddress);
+                
                 walletTokens.push({
                     key: data.symbol,
                     label: data.symbol,
-                    bottomLeftText: otherTokens.tokenBalances[i].contractAddress.substr(otherTokens.tokenBalances[i].contractAddress.length - 6),
-                    topRightText: parseInt(otherTokens.tokenBalances[i].tokenBalance) / Math.pow(10, data.decimals),
+                    bottomLeftText: '0x' + otherTokens.tokenBalances[i].contractAddress.substr(otherTokens.tokenBalances[i].contractAddress.length - 6),
+                    topRightText: (parseInt(otherTokens.tokenBalances[i].tokenBalance) / Math.pow(10, data.decimals)).toString(),
                     contractAddress: otherTokens.tokenBalances[i].contractAddress,
                     walletBalance: parseInt(otherTokens.tokenBalances[i].tokenBalance) / Math.pow(10, data.decimals),
                     ...data

@@ -11,7 +11,7 @@ module.exports = {
     connection: {
       database: 'template1',
     },
-    debug: true,
+    debug: false,
   },
   development: {
     client: 'pg',

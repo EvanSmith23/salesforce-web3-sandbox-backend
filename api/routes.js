@@ -1,7 +1,7 @@
 const express = require('express');
-const tokenPairs = require('./token.pairs');
-const walletTokens = require('./wallet.tokens');
-const walletTransactions = require('./wallet.transactions');
+const tokenPairs = require('./token/token.pairs');
+const walletTokens = require('./wallet/wallet.tokens');
+const walletTransactions = require('./wallet/wallet.transactions');
 const router = express.Router();
 
 router.get('/wallet/tokens/:wallet', walletTokens.GET_WALLET_TOKENS);
