@@ -3,7 +3,7 @@
     "info": {
       "version": "1.0.0", 
       "title": "Web3 Sandbox",
-      "description": "Build to break. Ship utility.",
+      "description": "APIs: Dexscreener & Etherscan. SDKs: Alchemy",
       "license": {
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
@@ -12,9 +12,30 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/api/wallet/tokens/{wallet}": {
+        "/api/app/wallets": {
             "get": {
-                "summary": "Get user wallet",
+                "summary": "Get all wallets stored in DB ",
+                "description": "Returns all wallet addresses.",
+                "tags": ["App"],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "All wallets"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/wallet/{wallet}/tokens": {
+            "get": {
+                "summary": "Get user wallet (utilizing the Alchemy SDK)",
                 "description": "Returns the user's wallet balance.",
                 "tags": ["Wallet"],
                 "parameters": [
@@ -43,9 +64,9 @@
                 }
             }
         },
-        "/api/wallet/transactions/{wallet}": {
+        "/api/wallet/{wallet}/transactions": {
             "get": {
-                "summary": "Get transactions by user wallet",
+                "summary": "Get transactions by user wallet (utilizing the Alchemy SDK)",
                 "description": "Returns the user's wallet transactions.",
                 "tags": ["Wallet"],
                 "parameters": [
@@ -76,7 +97,7 @@
         },
         "/api/token/pairs/{symbol}": {
             "get": {
-                "summary": "Get transactions by user wallet",
+                "summary": "Get transactions by user wallet (utilizing Dexscreener API)",
                 "description": "Returns the user's wallet transactions.",
                 "tags": ["Token"],
                 "parameters": [
@@ -111,6 +132,8 @@
         "name": "Wallet"
       },{
         "name": "Token"
+      },{
+        "name": "App"
       }
     ],
     "schemes": ["http"],

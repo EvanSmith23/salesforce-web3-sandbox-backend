@@ -20,7 +20,7 @@ module.exports = {
                 const saved = await Wallets.where('address', wallet).fetch();
             } catch (err) {
                 if (err.message == 'EmptyResponse') {
-                    const saved = await new Wallets({ address: wallet, chain: 'ethereum'}).save(); 
+                    const saved = await new Wallets({ address: wallet, chain: 'ethereum', name: 'Unknown'}).save(); 
                 } else {
                     console.log(err);
                 }
@@ -73,7 +73,9 @@ module.exports = {
                 })
             }
 
-            return res.json(walletTokens);
+            return res.json({
+                walletTokens: walletTokens
+            });
         } else {
             console.log("WALLET IS UNDEFINED")
         }
