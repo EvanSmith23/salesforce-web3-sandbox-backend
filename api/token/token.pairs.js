@@ -3,6 +3,8 @@ const Axios = require('axios');
 
 module.exports = {
     GET_TOKEN_PAIRS: async (req, res) => {
+        console.log('GET_TOKEN_PAIRS');
+        
         const { symbol } = req.params;
  
         try {

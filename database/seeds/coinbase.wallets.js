@@ -1,4 +1,4 @@
-const Wallets = require('../../database/models/wallets');
+const Wallets = require('../models/wallets');
 
 const knownWallets = [
     {

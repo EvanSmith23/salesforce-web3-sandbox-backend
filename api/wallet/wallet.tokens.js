@@ -9,26 +9,15 @@ const settings = {
 
 module.exports = {
     GET_WALLET_TOKENS: async (req, res) => {
+        console.log('GET_WALLET_TOKENS');
+
         const { wallet } = req.params;
         const alchemy = new Alchemy(settings);
 
         if (wallet !== undefined && wallet !== 'undefined') {
             /**
-             * Description: Record wallet connecting to site
-             **/
-            try {
-                const saved = await Wallets.where('address', wallet).fetch();
-            } catch (err) {
-                if (err.message == 'EmptyResponse') {
-                    const saved = await new Wallets({ address: wallet, chain: 'ethereum', name: 'Unknown'}).save(); 
-                } else {
-                    console.log(err);
-                }
-            }
-
-            /**
              * 
-             * Step 2
+             * Step 1
              * Description: Add native token
              * 
              */
@@ -50,7 +39,7 @@ module.exports = {
 
             /**
              * 
-             * Step 3
+             * Step 2
              * Description: Loop through tokens and retrieve token metadata
              * 
              **/
