@@ -6,9 +6,9 @@ const walletTransactions = require('./wallet/wallet.transactions');
 const router = express.Router();
 
 // Wallet Database Endpoints
-router.post('/app/wallet', appFunctions.POST_APP_WALLET);
 router.put('/app/wallet', appFunctions.PUT_APP_WALLET);
 router.get('/app/wallets', appFunctions.GET_APP_WALLETS);
+router.post('/app/wallets', appFunctions.POST_APP_WALLET);
 
 // 3rd Party Data Endpoints
 router.get('/wallet/:wallet/tokens', walletTokens.GET_WALLET_TOKENS);

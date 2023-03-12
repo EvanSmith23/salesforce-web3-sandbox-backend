@@ -9,7 +9,7 @@ module.exports = {
   local: {
     client: 'postgresql',
     connection: {
-      database: 'template1',
+      database: 'domedao',
     },
     debug: false,
   },

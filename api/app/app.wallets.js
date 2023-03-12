@@ -3,18 +3,18 @@ const Moment = require('moment');
 
 module.exports = {
     POST_APP_WALLET: async (req, res) => {
-        console.log('POST_APP_WALLET');
+        console.log('POST_APP_WALLETS');
 
-        const { info } = req.body;
+        const { address } = req.body;
 
         try {
-            let saved = await Wallets.where('address', info.wallet).fetch();
+            let saved = await Wallets.where('address', address).fetch();
 
             return res.json({ wallet: saved });
         } catch (err) {
             if (err.message == 'EmptyResponse') {
                 let saved = await new Wallets({ 
-                    address: info.wallet, 
+                    address: address, 
                     chain: 'ethereum', 
                     name: 'Placeholder'
                 }).save(); 
