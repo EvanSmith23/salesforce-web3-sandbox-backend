@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
       "version": "1.0.0", 
-      "title": "Web3 Sandbox",
+      "title": "Web3 Sandbox Backend",
       "description": "APIs: Dexscreener & Etherscan. SDKs: Alchemy",
       "license": {
         "name": "MIT",
@@ -12,11 +12,49 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/api/app/wallets": {
+        "/api/wallet": {
             "get": {
-                "summary": "Get all wallets stored in DB ",
+                "summary": "Get all wallets",
                 "description": "Returns all wallet addresses.",
-                "tags": ["App"],
+                "tags": ["Wallet"],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "All wallets"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create new wallet",
+                "description": "Adds the new wallet to the database.",
+                "tags": ["Wallet"],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "All wallets"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Updates a wallet",
+                "description": "Updates a wallet in the database.",
+                "tags": ["Wallet"],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -107,7 +145,7 @@
                         "description": "The symbol of the token to be retrieved.",
                         "required": true,
                         "type": "string",
-                        "example": "WETH"
+                        "example": "WETH, WETH/USDT, 0x5023475230547"
                     }
                 ],
                 "responses": {
@@ -132,8 +170,6 @@
         "name": "Wallet"
       },{
         "name": "Token"
-      },{
-        "name": "App"
       }
     ],
     "schemes": ["http"],
