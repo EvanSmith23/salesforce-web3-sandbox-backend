@@ -1,5 +1,13 @@
 const Wallets = require('../../database/models/wallets');
-const Moment = require('moment');
+const Moment = require('moment-timezone');
+const Axios = require('axios');
+const { Network, Alchemy } = require('alchemy-sdk');
+const walletServices = require('./wallet.services');
+
+const settings = {
+    apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
+    network: Network.ETH_MAINNET, // Replace with your network.
+};
 
 module.exports = {
     GET_WALLETS: async (req, res) => {
@@ -108,6 +116,16 @@ module.exports = {
 
             /**
              * Step 3
+             * Filter out tokens with 0 tokens and sort Alphabetically
+             */
+            walletTokens = walletTokens.filter((token) => token.walletBalance > 0).sort((a, b) => {
+                    if (a.label < b.label) return -1;
+                    else if (a.label > b.label) return 1;
+                    else return 0;
+                })
+
+            /**
+             * Step 4
              * Description: Pull Token Price Information
              **/
             for (let i=0; i < walletTokens.length; i++) {
@@ -115,6 +133,10 @@ module.exports = {
                 
                 if (dexscreener.data.pairs.length > 0) {
                     walletTokens[i].stats = dexscreener.data.pairs[0];
+                    walletTokens[i].priceUSD = dexscreener.data.pairs[0].priceUsd;
+                    walletTokens[i].priceChange1hr = dexscreener.data.pairs[0].priceChange.h1 + '%';
+                    walletTokens[i].priceChange24hr = dexscreener.data.pairs[0].priceChange.h24 + '%';
+                    walletTokens[i].url = dexscreener.data.pairs[0].url;
                 }
             }
 
@@ -125,58 +147,64 @@ module.exports = {
             console.log("WALLET IS UNDEFINED")
         }
     },
-    GET_WALLET_TRANSACTIONS: async (req, res) => {
+    GET_WALLET_ETHEREUM_TRANSACTIONS: async (req, res) => {
         console.log('GET_WALLET_TRANSACTIONS');
 
         const { wallet } = req.params;
-        const alchemy = new Alchemy(settings);
-
-        let walletsRaw = await Wallets.fetchAll()
-        let knownWallets = JSON.parse(JSON.stringify(walletsRaw));
-        let walletsMap = {};
-        for (let i = 0; i < knownWallets.length; i++){
-            walletsMap[knownWallets[i].address] = knownWallets[i];
-        }
 
         try {
-            /**
-             * Pull All Asset Transfers involving a wallet
-             */
-            let assetTransfersTo = await alchemy.core.getAssetTransfers({
-                toAddress: wallet,
-                category: ['external', "erc20", "erc721", "erc1155", "specialnft"],
-                withMetadata: true,
-                excludeZeroValue: true,
-            });
-
-            let assetTransfersFrom = await alchemy.core.getAssetTransfers({
-                fromAddress: wallet,
-                category: ['external', "erc20", "erc721", "erc1155", "specialnft"],
-                withMetadata: true,
-                excludeZeroValue: true,
-                order: 'desc'
-            });
-
-            let transactions = assetTransfersTo.transfers.concat(assetTransfersFrom.transfers)
+            let transactions = await walletServices.GET_50_MOST_RECENT_TRANSACTIONS(wallet, "ethereum");
             
             /**
              * Creating a Dictionary Combining Transactions (To - From & From - To)
              */
-            let txMatches = {};
             for (let i = 0; i < transactions.length; i++) {
-                transactions[i].blockTimestamp = transactions[i].metadata.blockTimestamp;
+                transactions[i].chain = 'Ethereum';
+                transactions[i].value = transactions[i].value?.toFixed(5) || 0.00;
+                transactions[i].blockTimestamp = Moment(transactions[i].metadata.blockTimestamp).tz("America/Chicago").format('lll');
                 transactions[i].contractAddress = transactions[i].rawContract.address;
-
-                if (txMatches[transactions[i].hash] !== undefined) {
-                    txMatches[transactions[i].hash].push(transactions[i]);
-                } else {
-                    txMatches[transactions[i].hash] = [transactions[i]]
+                
+                if (transactions[i].to.toUpperCase() === wallet.toUpperCase()) {
+                    transactions[i].action = "BUY";
+                } else if (transactions[i].from.toUpperCase() === wallet.toUpperCase()) {
+                    transactions[i].action = "SELL";
                 }
-            }
-
+            }      
+            
             return res.json({
-                'walletTransactions': transactions,
-                'txMatches': txMatches
+                'ethereumTransactions': transactions,
+            })
+        } catch (err) {
+            console.error(err);
+        }
+    },
+    GET_WALLET_ARBITRUM_TRANSACTIONS: async (req, res) => {
+        console.log('GET_WALLET_TRANSACTIONS');
+
+        const { wallet } = req.params;
+
+        try {
+            let transactions = await walletServices.GET_50_MOST_RECENT_TRANSACTIONS(wallet, "ethereum");
+            
+            /**
+             * Creating a Dictionary Combining Transactions (To - From & From - To)
+             */
+            for (let i = 0; i < transactions.length; i++) {
+                console.log(transactions[i]);
+                transactions[i].chain = 'Ethereum';
+                transactions[i].value = transactions[i].value.toFixed(5);
+                transactions[i].blockTimestamp = Moment(transactions[i].metadata.blockTimestamp).tz("America/Chicago").format('lll');
+                transactions[i].contractAddress = transactions[i].rawContract.address;
+                
+                if (transactions[i].to.toUpperCase() === wallet.toUpperCase()) {
+                    transactions[i].action = "BUY";
+                } else if (transactions[i].from.toUpperCase() === wallet.toUpperCase()) {
+                    transactions[i].action = "SELL";
+                }
+            }      
+            
+            return res.json({
+                'ethereumTransactions': transactions,
             })
         } catch (err) {
             console.error(err);

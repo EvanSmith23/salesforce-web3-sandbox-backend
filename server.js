@@ -14,11 +14,6 @@ app.use(express.json());
 app.set("json spaces", 2);
 app.use(cors());
 
-// local rollback: npx knex migrate:rollback --knexfile database/knexfile.js --env local
-// local latest: npx knex migrate:latest --knexfile database/knexfile.js --env local
-
-// app.use('/api/magic-eden', require('./api/magic-eden/magic-eden.routes'));
-// app.use('/api/solana', require('./api/solana/solana.routes'));
 app.use('/api/wallet', require('./api/wallet/wallet.routes'));
 app.use('/api/token', require('./api/token/token.routes'));
 app.use('/api/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
