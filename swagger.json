@@ -1,0 +1,178 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0", 
+      "title": "Web3 Sandbox Backend",
+      "description": "APIs: Dexscreener & Etherscan. SDKs: Alchemy",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/wallet": {
+            "get": {
+                "summary": "Get all wallets",
+                "description": "Returns all wallet addresses.",
+                "tags": ["Wallet"],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "All wallets"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create new wallet",
+                "description": "Adds the new wallet to the database.",
+                "tags": ["Wallet"],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "All wallets"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Updates a wallet",
+                "description": "Updates a wallet in the database.",
+                "tags": ["Wallet"],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "All wallets"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/wallet/{wallet}/tokens": {
+            "get": {
+                "summary": "Get user wallet (utilizing the Alchemy SDK)",
+                "description": "Returns the user's wallet balance.",
+                "tags": ["Wallet"],
+                "parameters": [
+                    {
+                    "name": "wallet",
+                    "in": "path",
+                    "description": "The wallet address to retrieve the wallet balance for.",
+                    "required": true,
+                    "type": "string",
+                    "example": "0xEBe035dA5DF98E8297D31cFD1c249732a6d6d3bA"
+                    }
+                ],
+                "responses": {
+                "200": {
+                    "description": "Successful response",
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "balance": {
+                        "type": "number",
+                        "description": "The user's wallet balance"
+                        }
+                    }
+                    }
+                }
+                }
+            }
+        },
+        "/api/wallet/{wallet}/transactions": {
+            "get": {
+                "summary": "Get transactions by user wallet (utilizing the Alchemy SDK)",
+                "description": "Returns the user's wallet transactions.",
+                "tags": ["Wallet"],
+                "parameters": [
+                    {
+                        "name": "wallet",
+                        "in": "path",
+                        "description": "The wallet address to retrieve the wallet transactions for.",
+                        "required": true,
+                        "type": "string",
+                        "example": "0xEBe035dA5DF98E8297D31cFD1c249732a6d6d3bA"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                    "description": "Successful response",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                        "balance": {
+                            "type": "number",
+                            "description": "The user's wallet balance"
+                        }
+                        }
+                    }
+                    }
+                }
+            }
+        },
+        "/api/token/pairs/{symbol}": {
+            "get": {
+                "summary": "Get transactions by user wallet (utilizing Dexscreener API)",
+                "description": "Returns the user's wallet transactions.",
+                "tags": ["Token"],
+                "parameters": [
+                    {
+                        "name": "symbol",
+                        "in": "path",
+                        "description": "The symbol of the token to be retrieved.",
+                        "required": true,
+                        "type": "string",
+                        "example": "WETH, WETH/USDT, 0x5023475230547"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "The user's wallet balance"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+      {
+        "name": "Wallet"
+      },{
+        "name": "Token"
+      }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"]
+}

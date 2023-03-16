@@ -3,9 +3,12 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-    return knex.schema.createTable('liked_collections', function (table) {
+    return knex.schema.createTable('wallets', function (table) {
         table.increments('id').primary();
+        table.string('address');
         table.string('name');
+        table.string('chain');
+        table.timestamps(true, true);
     });
 };
 
@@ -14,5 +17,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-    return knex.schema.dropTable('liked_collections');
+    return knex.schema.dropTable('wallets');
 };

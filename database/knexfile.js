@@ -9,9 +9,9 @@ module.exports = {
   local: {
     client: 'postgresql',
     connection: {
-      database: 'template1',
+      database: 'domedao',
     },
-    debug: true,
+    debug: false,
   },
   development: {
     client: 'pg',
