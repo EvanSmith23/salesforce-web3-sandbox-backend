@@ -1,8 +1,31 @@
 # Web3 Sandbox Backend 
 
+## API Structure
 
 
-[LEGACY WORK]
+
+## Versions
+
+### Version 1.0.0
+Description: Initial Project Creation
+
+1. API Changes
+ - 5 Wallet Endpoint
+    1. GET: /api/wallet
+    2. PUT: /api/wallet
+    3. POST: /api/wallet
+    4. GET: /api/wallet/:wallet/tokens/ethereum
+    5. GET: /api/wallet/:wallet/transactions/ethereum
+
+ - 1 Token Endpoint
+2. Database Changes
+3. Other
+
+
+
+
+
+[LEGACY NOTES]
 # Solana
 
 ## Anchor Framework
@@ -43,8 +66,6 @@
 - JSON RPC API
 - Solana Programs (smart contracts) are immutable meaning they can't be changed
 ## Magic Eden
-
-
 
 ### Program Derived Addresses
 - allow programs to sign for accounts while guaranteeing that no external user could also generate a valid signature for the same account

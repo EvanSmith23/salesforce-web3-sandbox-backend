@@ -147,7 +147,7 @@ module.exports = {
             console.log("WALLET IS UNDEFINED")
         }
     },
-    GET_WALLET_ETHEREUM_TRANSACTIONS: async (req, res) => {
+    GET_WALLET_TRANSACTIONS: async (req, res) => {
         console.log('GET_WALLET_TRANSACTIONS');
 
         const { wallet } = req.params;
@@ -172,42 +172,10 @@ module.exports = {
             }      
             
             return res.json({
-                'ethereumTransactions': transactions,
+                'walletTransactions': transactions,
             })
         } catch (err) {
             console.error(err);
         }
     },
-    GET_WALLET_ARBITRUM_TRANSACTIONS: async (req, res) => {
-        console.log('GET_WALLET_TRANSACTIONS');
-
-        const { wallet } = req.params;
-
-        try {
-            let transactions = await walletServices.GET_50_MOST_RECENT_TRANSACTIONS(wallet, "ethereum");
-            
-            /**
-             * Creating a Dictionary Combining Transactions (To - From & From - To)
-             */
-            for (let i = 0; i < transactions.length; i++) {
-                console.log(transactions[i]);
-                transactions[i].chain = 'Ethereum';
-                transactions[i].value = transactions[i].value.toFixed(5);
-                transactions[i].blockTimestamp = Moment(transactions[i].metadata.blockTimestamp).tz("America/Chicago").format('lll');
-                transactions[i].contractAddress = transactions[i].rawContract.address;
-                
-                if (transactions[i].to.toUpperCase() === wallet.toUpperCase()) {
-                    transactions[i].action = "BUY";
-                } else if (transactions[i].from.toUpperCase() === wallet.toUpperCase()) {
-                    transactions[i].action = "SELL";
-                }
-            }      
-            
-            return res.json({
-                'ethereumTransactions': transactions,
-            })
-        } catch (err) {
-            console.error(err);
-        }
-    }
 }
