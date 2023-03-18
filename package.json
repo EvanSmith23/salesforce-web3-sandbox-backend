@@ -8,7 +8,7 @@
     "deploy": "gcloud functions deploy app --region=us-central1 --runtime=nodejs18 --entry-point=server",
     "local:migrate:latest": "npx knex migrate:latest --knexfile database/knexfile.js --env local",
     "local:migrate:rollback": "npx knex migrate:rollback --knexfile database/knexfile.js --env local",
-    "gcp:deploy": "gcloud functions deploy app --region=us-central1 --runtime=nodejs18 --entry-point=server"
+    "gcp:deploy": "gcloud functions deploy app --region=us-central1 --runtime=nodejs16 --entry-point=server"
   },
   "author": "",
   "license": "ISC",
@@ -23,7 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "knex": "0.95.11",
+    "knex": "0.21.1",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.41",
     "path": "^0.12.7",
