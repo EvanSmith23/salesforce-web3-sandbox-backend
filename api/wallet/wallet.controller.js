@@ -24,6 +24,8 @@ module.exports = {
                 wallets[i].topRightText = Moment(wallets[i].created_at).format('LL');
             }
 
+            console.log(wallets);
+
             return res.json({
                 wallets: wallets,
             })
@@ -132,7 +134,7 @@ module.exports = {
                 let dexscreener = await Axios.get('https://api.dexscreener.com/latest/dex/search/?q=' + walletTokens[i].symbol + '/USDT');
                 
                 if (dexscreener.data.pairs.length > 0) {
-                    walletTokens[i].stats = dexscreener.data.pairs[0];
+                    // walletTokens[i].stats = dexscreener.data.pairs[0];
                     walletTokens[i].priceUSD = dexscreener.data.pairs[0].priceUsd;
                     walletTokens[i].priceChange1hr = dexscreener.data.pairs[0].priceChange.h1 + '%';
                     walletTokens[i].priceChange24hr = dexscreener.data.pairs[0].priceChange.h24 + '%';
