@@ -5,10 +5,11 @@
   "main": "server.js",
   "scripts": {
     "start": "npx functions-framework --target=server --signature-type=http",
-    "deploy": "gcloud functions deploy app --region=us-central1 --runtime=nodejs16 --entry-point=server --legacy-peer-deps",
-    "local:migrate:latest": "npx knex migrate:latest --knexfile database/knexfile.js --env local",
-    "local:migrate:rollback": "npx knex migrate:rollback --knexfile database/knexfile.js --env local",
-    "gcp:deploy": "gcloud functions deploy app --region=us-central1 --runtime=nodejs18 --entry-point=server"
+    "deploy": "gcloud functions deploy app --region=us-central1 --runtime=nodejs16 --entry-point=server",
+    "database:update": "npx knex migrate:latest --knexfile database/knexfile.js --env $ENVIRONMENT",
+    "database:create": "npx knex migrate:make $NAME --knexfile database/knexfile.js --env local",
+    "database:seed": "node database/seeds/domedao.wallets.js",
+    "database:rollback": "npx knex migrate:rollback --knexfile database/knexfile.js --env $ENVIRONMENT"
   },
   "author": "",
   "license": "ISC",

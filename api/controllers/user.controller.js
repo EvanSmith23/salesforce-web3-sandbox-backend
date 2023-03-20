@@ -1,5 +1,5 @@
 require('dotenv').config();
-const Wallets = require('../../database/models/wallets');
+const Users = require('../../database/models/users');
 const Moment = require('moment-timezone');
 
 module.exports = {
@@ -7,18 +7,18 @@ module.exports = {
         console.log('GET_APP_ACCOUNT');
 
         try {
-            let walletsRaw = await Wallets.fetchAll();
-            let wallets = JSON.parse(JSON.stringify(walletsRaw));
+            let usersRaw = await Users.fetchAll();
+            let users = JSON.parse(JSON.stringify(usersRaw));
 
-            for (let i = 0; i < wallets.length; i++) {
-                wallets[i].key = wallets[i].address;
-                wallets[i].label = wallets[i].name;
-                wallets[i].bottomLeftText = "0x" + wallets[i].address.substr(wallets[i].address.length - 6);
-                wallets[i].topRightText = Moment(wallets[i].created_at).format('LL');
+            for (let i = 0; i < users.length; i++) {
+                users[i].key = users[i].address;
+                users[i].label = users[i].name;
+                users[i].bottomLeftText = "0x" + users[i].address.substr(users[i].address.length - 6);
+                users[i].topRightText = Moment(users[i].created_at).format('LL');
             }
 
             return res.json({
-                wallets: wallets,
+                users: users,
             })
         } catch (err) {
             console.log(err);
@@ -30,18 +30,18 @@ module.exports = {
         const { address } = req.body;
 
         try {
-            let saved = await Wallets.where('address', address).fetch();
+            let saved = await Users.where('address', address).fetch();
 
-            return res.json({ wallet: saved });
+            return res.json({ user: saved });
         } catch (err) {
             if (err.message == 'EmptyResponse') {
-                let saved = await new Wallets({ 
+                let saved = await new Users({ 
                     address: address, 
                     chain: 'ethereum', 
                     name: 'Placeholder'
                 }).save(); 
 
-                return res.json({ wallet: saved });
+                return res.json({ user: saved });
             } else {
                 console.log(err);
             }
@@ -53,8 +53,8 @@ module.exports = {
         const { wallet, name } = req.body;
 
         try {
-            const updated = await Wallets.where('address', wallet).fetch();
-            console.log(updated);
+            const updated = await Users.where('address', wallet).fetch();
+
             const saved = await updated.save(
             {
                 'name': name
@@ -65,6 +65,7 @@ module.exports = {
             return res.json({ saved });
         } catch (error) {
             console.log('Error: ', error.message);
+            
             return res.json({ error });
         }
     },

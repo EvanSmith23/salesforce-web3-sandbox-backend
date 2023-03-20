@@ -1,5 +1,5 @@
 0xadf27ee1A23D5Df947d37CF65f1a10872e03d333
-const Wallets = require('../models/wallets');
+const User = require('../models/users');
 
 const knownWallets = [
     {
@@ -17,7 +17,7 @@ const knownWallets = [
 const importKnownWallets = (knownWallets) => {
     knownWallets.forEach((wallet) => {
         try {
-            new Wallets({
+            new User({
                 'address': wallet.address,
                 'name': wallet.name,
                 'chain': wallet.chain
