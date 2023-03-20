@@ -14,6 +14,9 @@ app.use(express.json());
 app.set("json spaces", 2);
 app.use(cors());
 
+// Documentation
+app.use('/api/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 // Arbitrum
 const ArbitrumController = require('./api/controllers/arbitrum.controller');
 app.get('/api/arbitrum/account/:account/tokens', ArbitrumController.GET_ARBITRUM_ACCOUNT_TOKENS);
@@ -31,9 +34,6 @@ const UserController = require('./api/controllers/user.controller');
 app.get('/api/user', UserController.getUser);
 app.post('/api/user', UserController.postUser);
 app.put('/api/user', UserController.putUser);
-
-// Documentation
-app.get('/api/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // UI Routes
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, 'public', 'index.html')));

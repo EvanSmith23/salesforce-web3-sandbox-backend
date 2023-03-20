@@ -16,43 +16,12 @@
             "get": {
                 "summary": "Get user wallet (utilizing the Alchemy SDK)",
                 "description": "Returns the user's wallet balance.",
-                "tags": ["Wallet"],
+                "tags": ["Arbitrum"],
                 "parameters": [
                     {
-                    "name": "wallet",
-                    "in": "path",
-                    "description": "The wallet address to retrieve the wallet balance for.",
-                    "required": true,
-                    "type": "string",
-                    "example": "0xEBe035dA5DF98E8297D31cFD1c249732a6d6d3bA"
-                    }
-                ],
-                "responses": {
-                "200": {
-                    "description": "Successful response",
-                    "schema": {
-                    "type": "object",
-                    "properties": {
-                        "balance": {
-                        "type": "number",
-                        "description": "The user's wallet balance"
-                        }
-                    }
-                    }
-                }
-                }
-            }
-        },
-        "/api/arbitrum/account/{wallet}/transactions": {
-            "get": {
-                "summary": "Get transactions by user wallet (utilizing the Alchemy SDK)",
-                "description": "Returns the user's wallet transactions.",
-                "tags": ["Wallet"],
-                "parameters": [
-                    {
-                        "name": "wallet",
+                        "name": "account",
                         "in": "path",
-                        "description": "The wallet address to retrieve the wallet transactions for.",
+                        "description": "The account address to retrieve the account balance for.",
                         "required": true,
                         "type": "string",
                         "example": "0xEBe035dA5DF98E8297D31cFD1c249732a6d6d3bA"
@@ -60,16 +29,47 @@
                 ],
                 "responses": {
                     "200": {
-                    "description": "Successful response",
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                        "balance": {
-                            "type": "number",
-                            "description": "The user's wallet balance"
-                        }
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "The user's wallet balance"
+                                }
+                            }
                         }
                     }
+                }
+            }
+        },
+        "/api/arbitrum/account/{account}/transactions": {
+            "get": {
+                "summary": "Get transactions by user wallet (utilizing the Alchemy SDK)",
+                "description": "Returns the user's wallet transactions.",
+                "tags": ["Arbitrum"],
+                "parameters": [
+                    {
+                        "name": "account",
+                        "in": "path",
+                        "description": "The account address to retrieve the account transactions for.",
+                        "required": true,
+                        "type": "string",
+                        "example": "0xEBe035dA5DF98E8297D31cFD1c249732a6d6d3bA"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "The user's wallet balance"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -78,30 +78,30 @@
             "get": {
                 "summary": "Get user wallet (utilizing the Alchemy SDK)",
                 "description": "Returns the user's wallet balance.",
-                "tags": ["Wallet"],
+                "tags": ["Ethereum"],
                 "parameters": [
                     {
-                    "name": "wallet",
-                    "in": "path",
-                    "description": "The wallet address to retrieve the wallet balance for.",
-                    "required": true,
-                    "type": "string",
-                    "example": "0xEBe035dA5DF98E8297D31cFD1c249732a6d6d3bA"
+                        "name": "account",
+                        "in": "path",
+                        "description": "The account address to retrieve the account balance for.",
+                        "required": true,
+                        "type": "string",
+                        "example": "0xEBe035dA5DF98E8297D31cFD1c249732a6d6d3bA"
                     }
                 ],
                 "responses": {
-                "200": {
-                    "description": "Successful response",
-                    "schema": {
-                    "type": "object",
-                    "properties": {
-                        "balance": {
-                        "type": "number",
-                        "description": "The user's wallet balance"
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "The user's wallet balance"
+                                }
+                            }
                         }
                     }
-                    }
-                }
                 }
             }
         },
@@ -109,7 +109,7 @@
             "get": {
                 "summary": "Get transactions by user wallet (utilizing the Alchemy SDK)",
                 "description": "Returns the user's wallet transactions.",
-                "tags": ["Wallet"],
+                "tags": ["Ethereum"],
                 "parameters": [
                     {
                         "name": "wallet",
@@ -122,16 +122,16 @@
                 ],
                 "responses": {
                     "200": {
-                    "description": "Successful response",
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                        "balance": {
-                            "type": "number",
-                            "description": "The user's wallet balance"
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "balance": {
+                                    "type": "number",
+                                    "description": "The user's wallet balance"
+                                }
+                            }
                         }
-                        }
-                    }
                     }
                 }
             }
@@ -140,7 +140,7 @@
             "get": {
                 "summary": "Get transactions by user wallet (utilizing Dexscreener API)",
                 "description": "Returns the user's wallet transactions.",
-                "tags": ["Token"],
+                "tags": ["Ethereum"],
                 "parameters": [
                     {
                         "name": "symbol",
@@ -171,7 +171,7 @@
             "get": {
                 "summary": "Get transactions by user wallet (utilizing Dexscreener API)",
                 "description": "Returns the user's wallet transactions.",
-                "tags": ["Token"],
+                "tags": ["Ethereum"],
                 "parameters": [
                     {
                         "name": "symbol",
@@ -259,13 +259,13 @@
         }
     },
     "tags": [
-      {
-        "name": "User"
-      },{
-        "name": "Ethereum"
-      },{
-        "name": "Arbitrum"
-      }
+        {
+            "name": "Arbitrum"
+        },{
+            "name": "Ethereum"
+        },{
+            "name": "User"
+        }
     ],
     "schemes": ["http"],
     "consumes": ["application/json"],
