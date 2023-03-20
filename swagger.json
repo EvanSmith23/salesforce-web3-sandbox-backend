@@ -3,7 +3,7 @@
     "info": {
       "version": "1.0.0", 
       "title": "Web3 Sandbox Backend",
-      "description": "APIs: Dexscreener. SDKs: Alchemy",
+      "description": "APIs: Dexscreener, CoinMarketCap, DefiLlama. SDKs: Alchemy",
       "license": {
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
