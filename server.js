@@ -30,6 +30,10 @@ app.get('/api/ethereum/token/pairs/:symbol', EthereumController.GET_ETHEREUM_TOK
 app.get('/api/ethereum/token/categories', EthereumController.GET_ETHEREUM_TOKEN_CATEGORIES);
 
 // Users
+const NotificationController = require('./api/controllers/notification.controller');
+app.post('/api/notification', NotificationController.POST_NOTIFICATION_FROM_ALCHEMY);
+
+// Users
 const UserController = require('./api/controllers/user.controller');
 app.get('/api/user', UserController.getUser);
 app.post('/api/user', UserController.postUser);
