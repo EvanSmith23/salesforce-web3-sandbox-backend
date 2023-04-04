@@ -9,31 +9,31 @@ module.exports = {
     const alchemy = new Alchemy(networkSettings);
 
     let assetTransfersFrom = await alchemy.core.getAssetTransfers({
-        fromAddress: accountAddress,
-        category: ['external', "erc20", "erc721", "erc1155", "specialnft"],
-        withMetadata: true,
-        excludeZeroValue: true,
-        order: 'desc'
+      fromAddress: accountAddress,
+      category: ['external', "erc20", "erc721", "erc1155", "specialnft"],
+      withMetadata: true,
+      excludeZeroValue: true,
+      order: 'desc'
     });
 
     let assetTransfersTo = await alchemy.core.getAssetTransfers({
-        toAddress: accountAddress,
-        category: ['external', "erc20", "erc721", "erc1155", "specialnft"],
-        withMetadata: true,
-        excludeZeroValue: true,
-        order: 'desc'
+      toAddress: accountAddress,
+      category: ['external', "erc20", "erc721", "erc1155", "specialnft"],
+      withMetadata: true,
+      excludeZeroValue: true,
+      order: 'desc'
     });
 
     let txBoth = assetTransfersFrom.transfers.concat(assetTransfersTo.transfers)
     
     return txBoth.sort((a,b) => {
-        if (new Date(a.metadata.blockTimestamp).getTime() < new Date(b.metadata.blockTimestamp).getTime()) {
-            return 1;
-        } else if (new Date(a.metadata.blockTimestamp).getTime() > new Date(b.metadata.blockTimestamp).getTime()) {
-            return -1;
-        } else {
-            return 0;
-        }
+      if (new Date(a.metadata.blockTimestamp).getTime() < new Date(b.metadata.blockTimestamp).getTime()) {
+          return 1;
+      } else if (new Date(a.metadata.blockTimestamp).getTime() > new Date(b.metadata.blockTimestamp).getTime()) {
+          return -1;
+      } else {
+          return 0;
+      }
     }).slice(0, numberOfTransactions);
   },
   formatAccountTransactions: async (networkSettings, accountAddress, transactions, chain) => {
@@ -58,10 +58,18 @@ module.exports = {
         transactions[i].price = historicalPrice.data.coins[`${chain}:${transactions[i].rawContract.address}`]?.price || '--';
       }*/
 
+      if (chain === "arbitrum" && transactions[i].asset === "WBTC") {
+        let account = await alchemy.core.getTokenBalances(transactions[i].from);
+
+        for (let i = 0; i < account.tokenBalances.length; i++) {
+          let token = await alchemy.core.getTokenMetadata(account.tokenBalances[i].contractAddress);
+        }
+      }
+
       let txHash = transactions[i].hash;
 
       if (tmp[txHash]) {
-        tmp[txHash].action = "SWAP";
+        tmp[txHash].action = "Swap";
         tmp[txHash].assetTwo = transactions[i].asset;
         tmp[txHash].summary = tmp[txHash].summary + " for " + (transactions[i].value?.toFixed(5) || 0.00) + " " + transactions[i].asset;
         tmp[txHash].contractAddressTwo = transactions[i].rawContract.address;
@@ -74,11 +82,11 @@ module.exports = {
         tmp[txHash].contractAddress = transactions[i].rawContract.address;
 
         if (transactions[i].to.toUpperCase() === accountAddress.toUpperCase()) {
-          tmp[txHash].action = "RECEIVE";
+          tmp[txHash].action = "Received";
         } else if (transactions[i].from.toUpperCase() === accountAddress.toUpperCase()) {
-          tmp[txHash].action = "TRANSFER";
+          tmp[txHash].action = "Sent";
         }
-        
+
         /**
          * GET TRANSACTION GAS USED
          */
@@ -111,6 +119,7 @@ module.exports = {
 
     let erc20Tokens = await alchemy.core.getTokenBalances(accountAddress);
 
+    /**  IF TOKENS ARE STAKED, YOU DON'T OWN THEM */
     for (let i = 0; i < erc20Tokens.tokenBalances.length; i++){
         let data = await alchemy.core.getTokenMetadata(erc20Tokens.tokenBalances[i].contractAddress);
         

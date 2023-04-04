@@ -4,8 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "npx functions-framework --target=server --signature-type=http",
-    "deploy": "gcloud functions deploy app --region=us-central1 --runtime=nodejs16 --entry-point=server",
+    "start": "node server.js",
+    "gcloud:start": "npx functions-framework --target=server --signature-type=http",
+    "gcloud:deploy": "gcloud functions deploy app --region=us-central1 --runtime=nodejs16 --entry-point=server",
     "database:update": "npx knex migrate:latest --knexfile database/knexfile.js --env $ENVIRONMENT",
     "database:create": "npx knex migrate:make $NAME --knexfile database/knexfile.js --env local",
     "database:seed": "node database/seeds/domedao.wallets.js",

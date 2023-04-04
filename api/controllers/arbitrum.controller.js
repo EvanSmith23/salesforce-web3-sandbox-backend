@@ -21,7 +21,9 @@ module.exports = {
 
     let finalAcctTkns = await Alchemy.formatAccountTokens(nonZeroTokens);
 
-    return finalAcctTkns;
+    return res.json({
+      'tokens': finalAcctTkns
+    });
   },
   GET_ARBITRUM_ACCOUNT_TRANSACTIONS: async (req,res) => {
     const { account } = req.params;

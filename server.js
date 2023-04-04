@@ -2,6 +2,7 @@ require('dotenv').config();
 const path = require('path');
 const cors = require('cors')
 const express = require('express');
+const PORT = process.env.PORT || 5003;
 const app = express();
 
 const swaggerUi = require('swagger-ui-express'),
@@ -15,7 +16,6 @@ app.set("json spaces", 2);
 app.use(cors());
 
 // Documentation
-app.use('/api/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Arbitrum
 const ArbitrumController = require('./api/controllers/arbitrum.controller');
@@ -40,9 +40,38 @@ app.post('/api/user', UserController.postUser);
 app.put('/api/user', UserController.putUser);
 
 // UI Routes
-app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, 'public', 'index.html')));
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(errorHandler);
 app.use(notFoundHandler);
 
-exports.server = app;
+// Remove X-Frame-Options to allow for rendering in an Iframe
+app.use((req, res, next) => {
+  res.removeHeader('X-Frame-Options');
+  next();
+});
+
+
+// Logs every incoming HTTP requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl} over ${req.protocol}`);
+  next();
+});
+
+app.get('/*', function(req, res) {
+  res.sendFile(path.resolve(__dirname, 'build', 'index.html'), function(err) {
+    if (err) {
+      res.status(500).send(err);
+    }
+  });
+});
+
+// Catch any promise rejections
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise ' + p + ' reason: ' + reason);
+});
+
+// Serve the app
+app.listen(PORT, () => {
+  console.log('Server running at port:' + PORT);
+});
