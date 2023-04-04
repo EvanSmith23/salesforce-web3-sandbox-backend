@@ -1,5 +1,5 @@
 require('dotenv').config();
-const Users = require('../../database/models/users');
+const Users = require('../models/users');
 const Moment = require('moment-timezone');
 
 module.exports = {

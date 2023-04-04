@@ -18,23 +18,23 @@ app.use(cors());
 // Documentation
 
 // Arbitrum
-const ArbitrumController = require('./api/controllers/arbitrum.controller');
+const ArbitrumController = require('./controllers/arbitrum.controller');
 app.get('/api/arbitrum/account/:account/tokens', ArbitrumController.GET_ARBITRUM_ACCOUNT_TOKENS);
 app.get('/api/arbitrum/account/:account/transactions', ArbitrumController.GET_ARBITRUM_ACCOUNT_TRANSACTIONS);
 
 // Ethereum 
-const EthereumController = require('./api/controllers/ethereum.controller');
+const EthereumController = require('./controllers/ethereum.controller');
 app.get('/api/ethereum/account/:account/tokens', EthereumController.GET_ETHEREUM_ACCOUNT_TOKENS);
 app.get('/api/ethereum/account/:account/transactions', EthereumController.GET_ETHEREUM_ACCOUNT_TRANSACTIONS);
 app.get('/api/ethereum/token/pairs/:symbol', EthereumController.GET_ETHEREUM_TOKEN_PAIRS);
 app.get('/api/ethereum/token/categories', EthereumController.GET_ETHEREUM_TOKEN_CATEGORIES);
 
 // Users
-const NotificationController = require('./api/controllers/notification.controller');
+const NotificationController = require('./controllers/notification.controller');
 app.post('/api/notification', NotificationController.POST_NOTIFICATION_FROM_ALCHEMY);
 
 // Users
-const UserController = require('./api/controllers/user.controller');
+const UserController = require('./controllers/user.controller');
 app.get('/api/user', UserController.getUser);
 app.post('/api/user', UserController.postUser);
 app.put('/api/user', UserController.putUser);
